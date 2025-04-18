@@ -1,13 +1,17 @@
-import { Image } from "@chakra-ui/react"
+import { Image, Box, Text } from "@chakra-ui/react"
 
-export default function Character(number) {
+export default function Character({number, name}) {
+
     const imageSrcList = [
-        "src/assets/characters/BigChungus.png",
-        "src/assets/characters/Grim.png",
-        "src/assets/characters/Zoidberg.png"
+        "../src/assets/characters/Big Chungus.png",
+        "../src/assets/characters/Wallace.png",
+        "../src/assets/characters/Zoidberg.png"
     ]
 
     return (
-        <Image src={imageSrcList[number]} fit="cover" borderRadius="full" boxSize="100px" alt="Character to find"/>
+        <Box p={5}>
+            <Image src={imageSrcList[number]} fit="cover" borderRadius="full" boxSize="80px" alt="Character to find"/>
+            <Text textAlign="center">{name}</Text>
+        </Box>
     )
 }

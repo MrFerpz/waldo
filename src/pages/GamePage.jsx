@@ -1,5 +1,9 @@
+import Header from "../components/Header"
+
 export default function GamePage() {
     return (
-        <div>GamePage</div>
+        <section>
+            <Header/>
+        </section>
     )
 }
