@@ -5,9 +5,9 @@ export default function Header() {
         <Box height="200px">
             <Timer></Timer>
             <Flex>
-                <Character name={xyz}></Character>
-                <Character name={xyz}></Character>
-                <Character name={xyz}></Character>
+                <Character number={1}></Character>
+                <Character number={2}></Character>
+                <Character number={3}></Character>
             </Flex>
         </Box>
     )
