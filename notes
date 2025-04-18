@@ -1,0 +1,17 @@
+Home Page
+- Simple centred box saying "Let's play"
+
+Game Page
+- Header including character pictures and timer
+- Large image below
+- On click, record mouse position
+- Generate a circle with a radius around click location
+- Generate a drop down menu
+- Upon click, make checks to see if that character is within that location (hosted on front-end). If yes, remove from top and give success message. If not, give custom error message.
+- Once all characters gone, freeze timer, say congratulations, and offer link to Leaderboard.
+
+Leaderboard
+- Input form with post request to backend.
+- Post username and time.
+- Get request for username + time.
+- Display leaderboard and add try again button.
