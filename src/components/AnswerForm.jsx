@@ -5,7 +5,7 @@ export default function AnswerForm({charsToFind, xPos, yPos, onAnswerClick}) {
         <Box bg="blackAlpha.950" p={1} position="absolute" left={xPos} top={yPos}>
             {charsToFind.map((char, index) => (
                 <Stack>
-                    <Button id={char} onClick={() => onAnswerClick(id)}  color="whiteAlpha.950" bgColor="blackAlpha.950" size="sm" key={index}>{char}</Button>
+                    <Button _hover={{bg: "green.700"}} id={char} onClick={() => onAnswerClick({char})}  color="whiteAlpha.950" bgColor="blackAlpha.950" size="sm" key={index}>{char}</Button>
                 </Stack>
             ))}
         </Box>

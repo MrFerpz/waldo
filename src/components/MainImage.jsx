@@ -1,5 +1,4 @@
 import { Image } from "@chakra-ui/react"
-import { createElement, useState } from "react"
 
 export default function MainImage({onClick}) {
 
