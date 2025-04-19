@@ -1,7 +1,7 @@
 import Header from "../components/Header"
 import MainImage from "../components/MainImage"
 import { Link } from "react-router"
-import { Button, Flex, Box } from "@chakra-ui/react"
+import { Button, Flex, Box, Text, Span } from "@chakra-ui/react"
 import { createElement, useState, useEffect} from "react"
 import AnswerForm from "../components/AnswerForm"
 
@@ -11,26 +11,27 @@ export default function GamePage() {
     const [formVisibility, setFormVisibility] = useState(false);
     const [formPosition, setFormPosition] = useState([0, 0]);
     const [coordinates, setCoordinates] = useState([0, 0]);
+    const [isWon, setIsWon] = useState(false);
+    const [winningTime, setWinningTime] = useState(0);
 
     function getWindowDimensions() {
         const { innerWidth: width, innerHeight: height } = window;
         const windowDims = { width, height};
         return windowDims;
-      }
-
-    function checkWin() {
-    if (charsToFind.length < 1) {
-        alert("Good job, you win!");
     }
-}
+    
+    function checkWin() {
+        if (charsToFind.length === 0) {
+            setIsWon(true);
+            setFormVisibility(false);
+            alert("Good job, you win!");
+        }
+    }
 
     useEffect(() => {
-        checkWin();
-    },[charsToFind])
-
-    // need to add a UseEffect to listen for window resizes and move everything accordingly
-    // this will hopefully help me calculate the "winning areas" for every screen size
-    // winning areas will likely need to be a dynamic variable with a setState call when resizing window
+            checkWin();
+        }, [charsToFind]
+       )
 
     const winningRatios = {
         // given as ratios of image dimensions, with y dimension being measured from the top
@@ -44,14 +45,12 @@ export default function GamePage() {
         const windowDims = getWindowDimensions();
         const winningCoordinate = [(relevantRatio.x * windowDims.width), (relevantRatio.y * windowDims.width + 150)];
         const winningZone = {
-             xMin: (winningCoordinate[0] - 50),
-             xMax: (winningCoordinate[0] + 50),
-             yMin: (winningCoordinate[1] - 50),
-             yMax: (winningCoordinate[1] + 50)
+             xMin: (winningCoordinate[0] - 75),
+             xMax: (winningCoordinate[0] + 75),
+             yMin: (winningCoordinate[1] - 75),
+             yMax: (winningCoordinate[1] + 75)
             }
 
-        console.log(coordinates);
-        console.log(winningZone);
             if ((coordinates[0] < winningZone.xMax)
             && (coordinates[0] > winningZone.xMin)
             && (coordinates[1] > winningZone.yMin)
@@ -60,18 +59,19 @@ export default function GamePage() {
                 alert("Great job!")
                 let newCharsToFind = charsToFind;
                 let index = newCharsToFind.findIndex((name => name === char.char))
-                console.log(index);
                 newCharsToFind.splice(index, 1);
                 setCharsToFind(newCharsToFind);
+                setFormVisibility(false);
+                setCircle([]);
             } else {
                 alert("Unfortunately not. Try again!")
+                setFormVisibility(false);
+                setCircle([]);
             }
          }
 
     function clickHandle(e) {
         // draw circle
-        const windowDims = getWindowDimensions();
-        console.log({ windowDims: [windowDims.width, windowDims.height], circleDims: [e.pageX, e.pageY]});
         const newCircle = drawCircle(e.pageX, e.pageY);
         setCircle(newCircle);
 
@@ -100,11 +100,21 @@ export default function GamePage() {
     return (
         <section>
             <Header/>
+            { (isWon) ?
+            <Flex height="calc(100vh - 150px)" justifyContent="center" alignItems="center" flexDirection="column">
+                <Box p={6} bg="blackAlpha.950" boxShadow="md">
+                    <Text textAlign="center">Congratulations</Text>
+                    <Text textAlign="center">Your time was "time"</Text>
+                    <Text textAlign="center">Did you make it onto the <Link color="blue" to="leaderboard">leaderboard</Link>?</Text>
+                </Box>
+            </Flex>
+            :
             <Box>
                 <MainImage onClick={clickHandle}/>
                 {circle}
                 {formVisibility ? <AnswerForm onAnswerClick={onAnswerClick} charsToFind={charsToFind} xPos={formPosition[0]} yPos={formPosition[1]}/> : ""}
             </Box>
+            }
             <Flex justifyContent="center">
             <Link to="/"><Button _hover={{bgColor: 'blackAlpha.900', color: "whiteAlpha.900", transform: "scale(1.13)"}} margin="20px" p={6}>Go back</Button></Link>
             </Flex>
