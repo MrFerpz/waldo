@@ -1,18 +1,39 @@
 import Header from "../components/Header"
 import MainImage from "../components/MainImage"
 import { Link } from "react-router"
-import { Button, Flex, Box, Text, Span } from "@chakra-ui/react"
-import { createElement, useState, useEffect} from "react"
+import { Button, Flex, Box, Text, Container } from "@chakra-ui/react"
+import { createElement, useState, useEffect, useRef} from "react"
 import AnswerForm from "../components/AnswerForm"
 
 export default function GamePage() {
-    const [circle, setCircle] = useState([]);
-    const [charsToFind, setCharsToFind] = useState(["Big Chungus", "Wallace", "Zoidberg"]);
+    // drawing the popups on-click
     const [formVisibility, setFormVisibility] = useState(false);
     const [formPosition, setFormPosition] = useState([0, 0]);
+    const [circle, setCircle] = useState([]);
+
+    // game logic
+    const [charsToFind, setCharsToFind] = useState(["Big Chungus", "Wallace", "Zoidberg"]);
     const [coordinates, setCoordinates] = useState([0, 0]);
     const [isWon, setIsWon] = useState(false);
+
+    // timer logic
     const [winningTime, setWinningTime] = useState(0);
+    const [time, setTime] = useState(0);
+    const [isRunning, setIsRunning] = useState(true);
+    const timeRef = useRef(0);
+
+    // Timer logic
+    useEffect(() => {
+        // setInterval makes a function that will repeat every x milliseconds
+        const interval = setInterval(() => {
+            // useRef means it wont trigger rerender (we do that once with setState below)
+            timeRef.current += 0.1;
+            setTime((Math.round(timeRef.current * 10) / 10))
+        }, 100);
+
+        // clean up when you leave page / unmount component
+        return () => clearInterval(interval);
+    },  []);
 
     function getWindowDimensions() {
         const { innerWidth: width, innerHeight: height } = window;
@@ -20,18 +41,15 @@ export default function GamePage() {
         return windowDims;
     }
     
-    function checkWin() {
-        if (charsToFind.length === 0) {
+    function checkWin(charsList) {
+        console.log(charsToFind);
+        if (charsList.length === 0) {
             setIsWon(true);
             setFormVisibility(false);
+            setWinningTime(time);
             alert("Good job, you win!");
         }
     }
-
-    useEffect(() => {
-            checkWin();
-        }, [charsToFind]
-       )
 
     const winningRatios = {
         // given as ratios of image dimensions, with y dimension being measured from the top
@@ -63,6 +81,7 @@ export default function GamePage() {
                 setCharsToFind(newCharsToFind);
                 setFormVisibility(false);
                 setCircle([]);
+                checkWin(newCharsToFind);
             } else {
                 alert("Unfortunately not. Try again!")
                 setFormVisibility(false);
@@ -99,21 +118,23 @@ export default function GamePage() {
 
     return (
         <section>
-            <Header/>
             { (isWon) ?
             <Flex height="calc(100vh - 150px)" justifyContent="center" alignItems="center" flexDirection="column">
                 <Box p={6} bg="blackAlpha.950" boxShadow="md">
                     <Text textAlign="center">Congratulations</Text>
-                    <Text textAlign="center">Your time was "time"</Text>
+                    <Text textAlign="center">Your time was {winningTime}</Text>
                     <Text textAlign="center">Did you make it onto the <Link color="blue" to="leaderboard">leaderboard</Link>?</Text>
                 </Box>
             </Flex>
             :
+            <Container>
+            <Header time={time}/>
             <Box>
                 <MainImage onClick={clickHandle}/>
                 {circle}
                 {formVisibility ? <AnswerForm onAnswerClick={onAnswerClick} charsToFind={charsToFind} xPos={formPosition[0]} yPos={formPosition[1]}/> : ""}
             </Box>
+            </Container>
             }
             <Flex justifyContent="center">
             <Link to="/"><Button _hover={{bgColor: 'blackAlpha.900', color: "whiteAlpha.900", transform: "scale(1.13)"}} margin="20px" p={6}>Go back</Button></Link>
