@@ -1,5 +1,4 @@
-import { PrismaClient } from "prisma";
-
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function postEntry(name, time) {
@@ -12,7 +11,8 @@ async function postEntry(name, time) {
 }
 
 async function getBoard() {
-    await prisma.leaderboard.findMany()
+    const leaderboard = await prisma.leaderboard.findMany();
+    return leaderboard;
 }
 
-export { postEntry, getBoard }
+module.exports = { postEntry, getBoard }

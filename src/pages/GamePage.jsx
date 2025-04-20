@@ -1,9 +1,10 @@
 import Header from "../components/Header"
 import MainImage from "../components/MainImage"
 import { Link } from "react-router"
-import { Button, Flex, Box, Text, Container } from "@chakra-ui/react"
+import { Button, Flex, Box, Text, Container, Input } from "@chakra-ui/react"
 import { createElement, useState, useEffect, useRef} from "react"
 import AnswerForm from "../components/AnswerForm"
+import { Label } from "@chakra-ui/react/dist/types/components/checkbox/namespace"
 
 export default function GamePage() {
     // drawing the popups on-click
@@ -121,9 +122,14 @@ export default function GamePage() {
             { (isWon) ?
             <Flex height="calc(100vh - 150px)" justifyContent="center" alignItems="center" flexDirection="column">
                 <Box p={6} bg="blackAlpha.950" boxShadow="md">
-                    <Text textAlign="center">Congratulations</Text>
-                    <Text textAlign="center">Your time was {winningTime}</Text>
-                    <Text textAlign="center">Did you make it onto the <Link color="blue" to="leaderboard">leaderboard</Link>?</Text>
+                    <Text textAlign="center">Congratulations!</Text>
+                    <Text textAlign="center">Your time was {winningTime}.</Text>
+                    <Text textAlign="center">Enter your name onto leaderboard!</Text>
+                    <form>
+                        <Label for="name">Name:</Label>
+                        <Input name="name" id="name"></Input>
+                    <Link to="leaderboard"><Button type="submit">Submit</Button></Link>
+                    </form>
                 </Box>
             </Flex>
             :
