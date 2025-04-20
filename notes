@@ -18,7 +18,6 @@ Leaderboard
 
 TODO
 ---------
-- Fix win check
-- Stop timer & record winning time (may need to lift state up or useContext)
-- Blank out the character once they've been picked
+- Fix win check DONE
+- Stop timer & record winning time (may need to lift state up or useContext) DONE
 - Make leaderboard
