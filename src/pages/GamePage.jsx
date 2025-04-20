@@ -1,10 +1,9 @@
 import Header from "../components/Header"
 import MainImage from "../components/MainImage"
 import { Link } from "react-router"
-import { Button, Flex, Box, Text, Container, Input } from "@chakra-ui/react"
+import { Button, Flex, Box, Text, Input} from "@chakra-ui/react"
 import { createElement, useState, useEffect, useRef} from "react"
 import AnswerForm from "../components/AnswerForm"
-import { Label } from "@chakra-ui/react/dist/types/components/checkbox/namespace"
 
 export default function GamePage() {
     // drawing the popups on-click
@@ -23,7 +22,10 @@ export default function GamePage() {
     const [isRunning, setIsRunning] = useState(true);
     const timeRef = useRef(0);
 
-    // Timer logic
+    // captures winner's name
+    const [name, setName] = useState("");
+
+    // setup timer
     useEffect(() => {
         // setInterval makes a function that will repeat every x milliseconds
         const interval = setInterval(() => {
@@ -117,6 +119,10 @@ export default function GamePage() {
         return circle
     }
 
+    function onNameEntry(e) {
+        setName(e.target.value)
+    }
+
     return (
         <section>
             { (isWon) ?
@@ -126,21 +132,21 @@ export default function GamePage() {
                     <Text textAlign="center">Your time was {winningTime}.</Text>
                     <Text textAlign="center">Enter your name onto leaderboard!</Text>
                     <form>
-                        <Label for="name">Name:</Label>
-                        <Input name="name" id="name"></Input>
-                    <Link to="leaderboard"><Button type="submit">Submit</Button></Link>
+                        <label htmlFor="name">Name:</label>
+                        <Input onChange={onNameEntry} value={name} name="name" id="name"></Input>
+                    <Link to={`/leaderboard/${name}/${time}`}><Button>Submit</Button></Link>
                     </form>
                 </Box>
             </Flex>
             :
-            <Container>
+            <div>
             <Header time={time}/>
             <Box>
                 <MainImage onClick={clickHandle}/>
                 {circle}
                 {formVisibility ? <AnswerForm onAnswerClick={onAnswerClick} charsToFind={charsToFind} xPos={formPosition[0]} yPos={formPosition[1]}/> : ""}
             </Box>
-            </Container>
+            </div>
             }
             <Flex justifyContent="center">
             <Link to="/"><Button _hover={{bgColor: 'blackAlpha.900', color: "whiteAlpha.900", transform: "scale(1.13)"}} margin="20px" p={6}>Go back</Button></Link>

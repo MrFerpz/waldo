@@ -13,7 +13,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage/>}/>
           <Route path="/game" element={<GamePage/>}/>
-          <Route path="/leaderboards" element={<LeaderboardPage/>}/>
+          <Route path="/leaderboard" element={<LeaderboardPage/>}/>
+          <Route path="/leaderboard/:name/:time" element={<LeaderboardPage/>}/>
         </Routes>
       </BrowserRouter>
     </Provider>

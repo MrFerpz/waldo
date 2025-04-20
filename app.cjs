@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const prisma = require("./prisma");
+const { postEntry, getBoard } = require("./prisma.cjs");
 const cors = require('cors');
 
 // necessary lines for correct data-parsing
@@ -10,20 +10,15 @@ app.use(express.urlencoded({ extended: true }));
 // allow requests from other ports
 app.use(cors());
 
-async function getBoard(req, res) {
-    const board = await prisma.getBoard();
-    res.json(board);
-}
-
-async function postEntry(req, res) {
+async function enterUser(req, res) {
     const name = req.body.name;
     const time = req.body.time;
-    await prisma.postEntry(name, time);
-    const board = await prisma.getBoard();
+    await postEntry(name, time);
+    const board = await getBoard();
     res.json(board);
 }
 
-app.get("/leaderboard", getBoard);
-app.post("/leaderboard", postEntry);
+app.post("/leaderboard", enterUser);
 
-app.listen(5432);
+console.log("Server running on 3000!");
+app.listen(3000);
