@@ -1,11 +1,12 @@
-import { Box, Flex, Stack, Table, Heading } from "@chakra-ui/react";
+import { Box, Flex, Button, Table, Heading } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useLocation, Link} from "react-router";
 
 export default function LeaderboardPage() {
     const [leaderboard, setLeaderboard] = useState([]);
     let { name, time } = useParams();
+    const location = useLocation();
 
     useEffect(() => {
         // post to leaderboard and retrieve data
@@ -28,13 +29,28 @@ export default function LeaderboardPage() {
                 console.log(err)
             }}
 
-    leaderboardEntry();
+        const leaderboardAccess = async () => {
+            try {
+                const leaderboardData = await axios.get("http://localhost:3000/leaderboard");
+                const data = leaderboardData.data;
+                const sortedData = data.sort((a, b) => a.time - b.time);
+                setLeaderboard(sortedData);
+            } catch(err) {
+                console.log(err)
+            }
+        }
+    
+    if (location.state?.newScore) {
+        leaderboardEntry();
+    } else {
+        leaderboardAccess();
+    }
     }, [])
 
     return (
-        <Flex justifyContent="center" alignItems="center">
-            <Box width="80vw" marginTop="40px" p={2} bg="blackAlpha.800">
-                <Heading textAlign="center" marginTop="10px" marginBottom="10px">LEADERBOARD</Heading>
+        <Flex height="100%" flexDirection="column" justifyContent="center" alignItems="center">
+            <Heading marginTop="20px" textAlign="center">LEADERBOARD</Heading>
+            <Box width="80vw" marginTop="5px" p={2} bg="blackAlpha.800">
                 <Table.Root showColumnBorder variant="outline">
                     <Table.Header>
                         <Table.Row>
@@ -52,6 +68,7 @@ export default function LeaderboardPage() {
                     })}
                 </Table.Root>
             </Box>
+            <Link to="/home"><Button width="200px" marginTop="10px">Home</Button></Link>
         </Flex>
     )
 }

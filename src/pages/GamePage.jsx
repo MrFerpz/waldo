@@ -134,7 +134,7 @@ export default function GamePage() {
                     <form>
                         <label htmlFor="name">Name:</label>
                         <Input onChange={onNameEntry} value={name} name="name" id="name"></Input>
-                    <Link to={`/leaderboard/${name}/${winningTime}`}><Button>Submit</Button></Link>
+                    <Link to={`/leaderboard/${name}/${winningTime}`} state={{newScore: true}}><Button>Submit</Button></Link>
                     </form>
                 </Box>
             </Flex>

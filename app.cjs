@@ -18,7 +18,13 @@ async function enterUser(req, res) {
     res.json(board);
 }
 
+async function getLeaderboard(req, res) {
+    const board = await getBoard();
+    res.json(board);
+}
+
 app.post("/leaderboard", enterUser);
+app.get("/leaderboard", getLeaderboard);
 
 console.log("Server running on 3000!");
 app.listen(3000);
